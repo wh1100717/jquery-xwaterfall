@@ -1,0 +1,28 @@
+{
+  "name": "jquery-xwaterfall",
+  "title": "Jquery xWaterfall",
+  "description": "The best jQuery plugin ever.",
+  "version": "0.0.1",
+  "homepage": "",
+  "author": {
+    "name": "wh1100717, somonus",
+    "url": "https://github.com/wh1100717"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": "",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  },
+  "keywords": [
+    "jquery-plugin"
+  ]
+}

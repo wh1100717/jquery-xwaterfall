@@ -1,0 +1,51 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <title>xwaterfall</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <link rel="shortcut icon" href="/favicon.ico">
+        <script type="text/javascript" src="sea.js"></script>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- build:css styles/vendor.css -->
+        <!-- bower:css -->
+        <!-- endbower -->
+        <!-- endbuild -->
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/main.css">
+        <!-- endbuild -->
+        <style>
+        html,body {margin: 0;padding: 0;font: 14px "微软雅黑";text-align: center;}
+        ul,li{margin: 0;padding: 0;list-style: none;}
+        img{vertical-align: top}
+        #waterfall{margin-left: 10px;position: relative;}
+        #waterfall li{position: absolute;}
+        </style>
+
+    </head>
+    <body>
+        <!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <ul data-ajax="/category/moe/?_type=&_=1410424447238" id="waterfall">
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/1.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_3.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_5.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_7.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_9.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/1.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_3.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_5.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_7.jpg" width="200"></a></li>
+            <li style="left:0px;bottom:0px;"><a href=""><img src="images/image_9.jpg" width="200"></a></li>
+        </ul>
+        <script type="text/javascript">
+            seajs.use("scripts/main.js",function(lazyshow){
+                        lazyshow.init("#waterfall", "li");
+                    });
+        </script>
+
+</body>
+</html>
