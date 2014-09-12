@@ -23,28 +23,38 @@
             @page = 1
             @unloadNum = 0
             @loading = false
-            @colNum = @container.width() / @options.width
+            @colNum = Math.floor(@container.width() / @options.width)
             @colWidths = (i * @options.width for i in [0...@colNum])
             @colHeights = (0 for i in [0...@colNum])
-            console.log @colHeights
-            console.log @colNum
             self = @
-            loadData =  ->
-                return if self.unloadNum > 0
-                return if self.loading
-                win = $(window)
-                winTop = win.scrollTop() + win.height()
-                absTop = self.container.offset().top + self.container.height()
-                return if winTop < absTop - 2 * win.height()
-                self.loading = true
-                $.getJSON self.options.url, {page: self.page}, (data)->
-                    return if not data?
-                    self.generate(data)
-                    self.unloadNum += data.length
-                    self.page += 1
-                    self.loading = false
-                return @
-            $(window).bind("scroll", loadData)
+            $(window).bind("scroll", -> self.loadData(self))
+            $(window).resize -> self.resize(self)
+        loadData: (self) ->
+            return if self.unloadNum > 0
+            return if self.loading
+            win = $(window)
+            winTop = win.scrollTop() + win.height()
+            absTop = self.container.offset().top + self.container.height()
+            return if winTop < absTop - 2 * win.height()
+            self.loading = true
+            $.getJSON self.options.url, {page: self.page}, (data)->
+                return if not data?
+                self.generate(data)
+                self.unloadNum += data.length
+                self.page += 1
+                self.loading = false
+            return @
+        resize: (self) ->
+            newcolNum = Math.floor(@container.width() / @options.width)
+            console.log newcolNum
+            console.log @colNum
+            return if newcolNum is @colNum
+            @colNum = newcolNum
+            @colWidths = (i * @options.width for i in [0...@colNum])
+            @colHeights = (0 for i in [0...@colNum])
+            wrappers = $("#waterfall li")
+            wrappers.each ->
+                self.insert($(@))
         generate: (data) ->
             self = @
             tpl = ""
@@ -68,7 +78,6 @@
                 minIndex = index
                 break
             @colHeights[minIndex] += node.height()
-            console.log minHeigth
             node.animate {
                 top: minHeigth
                 left: @colWidths[minIndex]

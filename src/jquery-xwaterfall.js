@@ -28,11 +28,11 @@
     }
 
     WaterFall.prototype.init = function() {
-      var i, loadData, self;
+      var i, self;
       this.page = 1;
       this.unloadNum = 0;
       this.loading = false;
-      this.colNum = this.container.width() / this.options.width;
+      this.colNum = Math.floor(this.container.width() / this.options.width);
       this.colWidths = (function() {
         var _i, _ref, _results;
         _results = [];
@@ -49,38 +49,73 @@
         }
         return _results;
       }).call(this);
-      console.log(this.colHeights);
-      console.log(this.colNum);
       self = this;
-      loadData = function() {
-        var absTop, win, winTop;
-        if (self.unloadNum > 0) {
+      $(window).bind("scroll", function() {
+        return self.loadData(self);
+      });
+      return $(window).resize(function() {
+        return self.resize(self);
+      });
+    };
+
+    WaterFall.prototype.loadData = function(self) {
+      var absTop, win, winTop;
+      if (self.unloadNum > 0) {
+        return;
+      }
+      if (self.loading) {
+        return;
+      }
+      win = $(window);
+      winTop = win.scrollTop() + win.height();
+      absTop = self.container.offset().top + self.container.height();
+      if (winTop < absTop - 2 * win.height()) {
+        return;
+      }
+      self.loading = true;
+      $.getJSON(self.options.url, {
+        page: self.page
+      }, function(data) {
+        if (data == null) {
           return;
         }
-        if (self.loading) {
-          return;
+        self.generate(data);
+        self.unloadNum += data.length;
+        self.page += 1;
+        return self.loading = false;
+      });
+      return this;
+    };
+
+    WaterFall.prototype.resize = function(self) {
+      var i, newcolNum, wrappers;
+      newcolNum = Math.floor(this.container.width() / this.options.width);
+      console.log(newcolNum);
+      console.log(this.colNum);
+      if (newcolNum === this.colNum) {
+        return;
+      }
+      this.colNum = newcolNum;
+      this.colWidths = (function() {
+        var _i, _ref, _results;
+        _results = [];
+        for (i = _i = 0, _ref = this.colNum; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          _results.push(i * this.options.width);
         }
-        win = $(window);
-        winTop = win.scrollTop() + win.height();
-        absTop = self.container.offset().top + self.container.height();
-        if (winTop < absTop - 2 * win.height()) {
-          return;
+        return _results;
+      }).call(this);
+      this.colHeights = (function() {
+        var _i, _ref, _results;
+        _results = [];
+        for (i = _i = 0, _ref = this.colNum; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          _results.push(0);
         }
-        self.loading = true;
-        $.getJSON(self.options.url, {
-          page: self.page
-        }, function(data) {
-          if (data == null) {
-            return;
-          }
-          self.generate(data);
-          self.unloadNum += data.length;
-          self.page += 1;
-          return self.loading = false;
-        });
-        return this;
-      };
-      return $(window).bind("scroll", loadData);
+        return _results;
+      }).call(this);
+      wrappers = $("#waterfall li");
+      return wrappers.each(function() {
+        return self.insert($(this));
+      });
     };
 
     WaterFall.prototype.generate = function(data) {
@@ -115,7 +150,6 @@
         break;
       }
       this.colHeights[minIndex] += node.height();
-      console.log(minHeigth);
       node.animate({
         top: minHeigth,
         left: this.colWidths[minIndex]
