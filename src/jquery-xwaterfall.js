@@ -19,7 +19,14 @@
     return options = $.extend({}, $.waterfall.options, options);
   };
   $.waterfall.options = {
-    width: 335
+    width: 335,
+
+    /* Support Animate Effect
+     *  flyIn
+     *  fadeIn
+     *  none
+     */
+    animate: 'fadeIn'
   };
   WaterFall = (function() {
     function WaterFall(container, options) {
@@ -124,7 +131,7 @@
       tpl = "";
       for (_i = 0, _len = data.length; _i < _len; _i++) {
         d = data[_i];
-        tpl += "<li style=\"left: " + (this.random(6000)) + "px; top: " + (this.random(6000)) + "px;\">\n    <a href=\"javascript:void(0)\">\n        <img src=\"" + d.isrc + "\" width=\"" + this.options.width + "\">\n    </a>\n</li>";
+        tpl += "<li style=\"left: " + (this.random(this.container.width() * 2)) + "px; top: " + (this.random(this.container.height() * 2)) + "px; display:none;\">\n    <a href=\"javascript:void(0)\">\n        <img src=\"" + d.isrc + "\" width=\"" + this.options.width + "\">\n    </a>\n</li>";
       }
       wrappers = $(tpl);
       this.container.append(wrappers);
@@ -150,10 +157,21 @@
         break;
       }
       this.colHeights[minIndex] += node.height();
-      node.animate({
-        top: minHeigth,
-        left: this.colWidths[minIndex]
-      });
+      if (this.options.animate === 'flyIn') {
+        node.show();
+        node.animate({
+          top: minHeigth,
+          left: this.colWidths[minIndex]
+        }, 500);
+      } else if (this.options.animate === 'fadeIn') {
+        node.css("top", minHeigth);
+        node.css("left", this.colWidths[minIndex]);
+        node.fadeIn(500);
+      } else {
+        node.css("top", minHeigth);
+        node.css("left", this.colWidths[minIndex]);
+        node.show();
+      }
       this.container.css("height", Math.max.apply({}, this.colHeights));
       return this.unloadNum -= 1;
     };

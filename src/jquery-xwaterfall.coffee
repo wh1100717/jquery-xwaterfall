@@ -15,6 +15,12 @@
         options = $.extend({}, $.waterfall.options, options)
     $.waterfall.options = {
         width: 335
+        ### Support Animate Effect
+         *  flyIn
+         *  fadeIn
+         *  none
+        ###
+        animate: 'fadeIn'
     }
 
     class WaterFall
@@ -60,7 +66,7 @@
             tpl = ""
             for d in data
                 tpl += """
-                    <li style="left: #{@random(6000)}px; top: #{@random(6000)}px;">
+                    <li style="left: #{@random(@container.width()*2)}px; top: #{@random(@container.height()*2)}px; display:none;">
                         <a href="javascript:void(0)">
                             <img src="#{d.isrc}" width="#{@options.width}">
                         </a>
@@ -78,10 +84,20 @@
                 minIndex = index
                 break
             @colHeights[minIndex] += node.height()
-            node.animate {
-                top: minHeigth
-                left: @colWidths[minIndex]
-            }
+            if @options.animate is 'flyIn'
+                node.show()
+                node.animate {
+                    top: minHeigth
+                    left: @colWidths[minIndex]
+                },500
+            else if @options.animate is 'fadeIn'
+                node.css("top", minHeigth)
+                node.css("left", @colWidths[minIndex])
+                node.fadeIn(500)                
+            else
+                node.css("top", minHeigth)
+                node.css("left", @colWidths[minIndex])
+                node.show()
             @container.css("height", Math.max.apply({}, @colHeights))
             @unloadNum -= 1
         random: (number) -> Math.floor(Math.random() * number)
